@@ -2,13 +2,12 @@ package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
+import guru.qa.niffler.jupiter.Category;
 import guru.qa.niffler.jupiter.Spend;
 import guru.qa.niffler.jupiter.User;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
-import guru.qa.niffler.model.UserJson;
-import io.qameta.allure.Allure;
-import io.qameta.allure.AllureId;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -25,6 +24,7 @@ public class SpendingWebTest extends BaseWebTest {
     static {
         Configuration.browser = "chrome";
         Configuration.browserSize = "1980x1024";
+        Configuration.pageLoadStrategy = "eager";
     }
 
     private static final String user = "dima";
@@ -33,16 +33,25 @@ public class SpendingWebTest extends BaseWebTest {
     void doLogin(@User(userType = WITH_FRIENDS) UserJson userForTest) {
         Selenide.open("http://127.0.0.1:3000/main");
         $("a[href*='redirect']").click();
-        $("input[name='username']").setValue(userForTest.getUsername());
-        $("input[name='password']").setValue(userForTest.getPassword());
+        $("input[name='username']").setValue("SLomako");
+        $("input[name='password']").setValue("12345");
         $("button[type='submit']").click();
     }
 
+    @AfterEach
+    void tearDown() {
+        Selenide.closeWebDriver();
+    }
+
+    @Category(
+            username = "SLomako",
+            category = "Стрельба"
+    )
     @Spend(
-            username = user,
-            description = "Рыбалка на Ладоге",
-            category = "Рыбалка",
-            amount = 14000.00,
+            username = "SLomako",
+            description = "Соревнования",
+            category = "Стрельба",
+            amount = 10000.00,
             currency = CurrencyValues.RUB
     )
     @Test
@@ -51,10 +60,9 @@ public class SpendingWebTest extends BaseWebTest {
                                                   @User(userType = WITH_FRIENDS) UserJson userForTest) {
         $(".spendings__content tbody")
                 .$$("tr")
-                .find(text(createdSpend.getDescription()))
-                .$$("td")
-                .first()
-                .scrollTo()
+                .findBy(text(createdSpend.getDescription()))
+                .$("td", 0)
+                .scrollIntoView(true)
                 .click();
 
         Allure.step(
