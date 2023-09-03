@@ -2,6 +2,7 @@ package guru.qa.niffler.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import guru.qa.niffler.jupiter.UserQueue;
 import guru.qa.niffler.jupiter.User;
 
 import java.util.UUID;
@@ -24,6 +25,25 @@ public class UserJson {
     private FriendState friendState;
 
     transient String password;
+    transient UserQueue.UserType userType;
+    transient String usernamePeek;
+
+    public String getUsernamePeek() {
+        return usernamePeek;
+    }
+
+    public void setUsernamePeek(String usernamePeek) {
+        this.usernamePeek = usernamePeek;
+    }
+
+    public UserQueue.UserType getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserQueue.UserType userType) {
+        this.userType = userType;
+    }
+  
     transient User.UserType userType;
 
     public UserJson() {

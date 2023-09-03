@@ -8,7 +8,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-@ExtendWith(BrowserExtension.class)
-public @interface WebTest {
+@Target(ElementType.PARAMETER)
+@ExtendWith(UserQueueExtension.class)
+public @interface UserQueue {
+
+    UserType userType();
+
+    enum UserType {
+        INVITE_SENT, INVITE_RECEIVED, FRIEND
+    }
 }

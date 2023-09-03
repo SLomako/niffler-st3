@@ -1,13 +1,12 @@
 package guru.qa.niffler.test;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.Category;
 import guru.qa.niffler.jupiter.Spend;
-import guru.qa.niffler.jupiter.User;
+import guru.qa.niffler.jupiter.WebTest;
+
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -18,16 +17,8 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static guru.qa.niffler.jupiter.User.UserType.WITH_FRIENDS;
 
-@Disabled
-public class SpendingWebTest extends BaseWebTest {
-
-    static {
-        Configuration.browser = "chrome";
-        Configuration.browserSize = "1980x1024";
-        Configuration.pageLoadStrategy = "eager";
-    }
-
-    private static final String user = "dima";
+@WebTest
+public class SpendingWebTest {
 
     @BeforeEach
     void doLogin(@User(userType = WITH_FRIENDS) UserJson userForTest) {
@@ -36,11 +27,6 @@ public class SpendingWebTest extends BaseWebTest {
         $("input[name='username']").setValue("SLomako");
         $("input[name='password']").setValue("12345");
         $("button[type='submit']").click();
-    }
-
-    @AfterEach
-    void tearDown() {
-        Selenide.closeWebDriver();
     }
 
     @Category(
