@@ -3,7 +3,7 @@ buildscript {
         protobufVersion = '3.21.12'
         grpcVersion = '1.52.1'
         allureVersion = '2.21.0'
-        selenideVersion = '6.17.2'
+        selenideVersion = '6.18.0'
     }
 }
 
@@ -91,6 +91,8 @@ dependencies {
     testImplementation 'p6spy:p6spy:3.9.1'
     testImplementation 'org.hibernate:hibernate-core:6.1.7.Final'
     testImplementation 'com.github.vertical-blank:sql-formatter:2.0.3'
+    testImplementation 'org.springframework.security:spring-security-core:6.1.0'
+
     // Allure
     testImplementation "io.qameta.allure:allure-attachments:${allureVersion}"
     testImplementation("io.qameta.allure:allure-junit5:${allureVersion}") {

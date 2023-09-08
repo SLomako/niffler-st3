@@ -2,7 +2,7 @@ package guru.qa.niffler.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import guru.qa.niffler.jupiter.UserQueue;
+import guru.qa.niffler.jupiter.annotation.UserQueue;
 
 import java.util.UUID;
 

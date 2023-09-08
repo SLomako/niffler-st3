@@ -1,4 +1,4 @@
-package guru.qa.niffler.jupiter;
+package guru.qa.niffler.jupiter.exstension;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
