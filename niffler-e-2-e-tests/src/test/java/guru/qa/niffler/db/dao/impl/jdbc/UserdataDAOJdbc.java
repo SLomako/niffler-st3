@@ -61,6 +61,7 @@ public class UserdataDAOJdbc implements UserdataDAO {
                 conn.commit();
             } catch (SQLException e) {
                 conn.rollback();
+                throw new RuntimeException(e);
             } finally {
                 conn.setAutoCommit(true);
             }

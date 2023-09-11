@@ -31,9 +31,11 @@ public class DBCreateUserExtension implements BeforeEachCallback, AfterTestExecu
     @Dao
     private UserdataDAO userDataDAO;
 
+    private Faker faker = new Faker();
+
+
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
-        Faker faker = new Faker();
         daoExtension.postProcessTestInstance(this, context);
 
         Method testMethod = context.getRequiredTestMethod();

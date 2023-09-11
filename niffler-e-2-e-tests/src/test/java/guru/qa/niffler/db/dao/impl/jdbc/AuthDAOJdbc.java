@@ -48,6 +48,7 @@ public class AuthDAOJdbc implements AuthDAO {
                 conn.commit();
             } catch (SQLException e) {
                 conn.rollback();
+                throw new RuntimeException(e);
             } finally {
                 conn.setAutoCommit(true);
             }
