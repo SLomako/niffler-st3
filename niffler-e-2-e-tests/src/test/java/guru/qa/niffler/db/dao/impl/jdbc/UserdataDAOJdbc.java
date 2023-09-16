@@ -3,7 +3,7 @@ package guru.qa.niffler.db.dao.impl.jdbc;
 import guru.qa.niffler.db.dao.UserdataDAO;
 import guru.qa.niffler.db.jdbc.DataSourceProvider;
 import guru.qa.niffler.db.model.userdata.CurrencyValues;
-import guru.qa.niffler.db.model.userdata.UserDataUserEntity;
+import guru.qa.niffler.db.model.userdata.UserdataUserEntity;
 import guru.qa.niffler.db.springjdbc.ServiceDB;
 
 import javax.sql.DataSource;
@@ -20,7 +20,7 @@ public class UserdataDAOJdbc implements UserdataDAO {
     DataSource userdataDs = DataSourceProvider.INSTANCE.getDataSource(ServiceDB.USERDATA);
 
     @Override
-    public UUID createUser(UserDataUserEntity user) {
+    public UUID createUser(UserdataUserEntity user) {
         UUID userID;
         try (Connection conn = userdataDs.getConnection()) {
             try (PreparedStatement usersPs = conn.prepareStatement(
@@ -71,15 +71,15 @@ public class UserdataDAOJdbc implements UserdataDAO {
     }
 
     @Override
-    public List<UserDataUserEntity> getAllUsers() {
-        List<UserDataUserEntity> userEntityList = new ArrayList<>();
+    public List<UserdataUserEntity> getAllUsers() {
+        List<UserdataUserEntity> userEntityList = new ArrayList<>();
         try (Connection conn = userdataDs.getConnection();
              PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM users")) {
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 UUID id = (UUID) rs.getObject("id");
                 String username = rs.getString("username");
-                userEntityList.add(new UserDataUserEntity(id, username));
+                userEntityList.add(new UserdataUserEntity(id, username));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

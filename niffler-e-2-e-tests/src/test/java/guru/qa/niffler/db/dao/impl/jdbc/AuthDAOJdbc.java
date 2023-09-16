@@ -4,6 +4,7 @@ import guru.qa.niffler.db.dao.AuthDAO;
 import guru.qa.niffler.db.jdbc.DataSourceProvider;
 import guru.qa.niffler.db.model.auth.AuthUserEntity;
 import guru.qa.niffler.db.model.auth.Authority;
+import guru.qa.niffler.db.model.auth.AuthorityEntity;
 import guru.qa.niffler.db.springjdbc.ServiceDB;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -136,5 +137,39 @@ public class AuthDAOJdbc implements AuthDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public AuthUserEntity getUserById(UUID userId) {
+        AuthUserEntity user = new AuthUserEntity();
+        boolean userDataFetched = false;
+        try (Connection conn = authDs.getConnection();
+             PreparedStatement usersPs = conn.prepareStatement(
+                     "SELECT * FROM users u JOIN authorities a ON u.id = a.user_id WHERE u.id = ?")) {
+            usersPs.setObject(1, userId);
+
+            try (ResultSet resultSet = usersPs.executeQuery()) {
+                while (resultSet.next()) {
+                    if (!userDataFetched) {
+                        user.setId(resultSet.getObject("id", UUID.class));
+                        user.setUsername(resultSet.getString("username"));
+                        user.setPassword(resultSet.getString("password"));
+                        user.setEnabled(resultSet.getBoolean("enabled"));
+                        user.setAccountNonExpired(resultSet.getBoolean("account_non_expired"));
+                        user.setAccountNonLocked(resultSet.getBoolean("account_non_locked"));
+                        user.setCredentialsNonExpired(resultSet.getBoolean("credentials_non_expired"));
+                        userDataFetched = true;
+                    }
+
+                    AuthorityEntity authorityEntity = new AuthorityEntity();
+                    Authority authority = Authority.valueOf(resultSet.getString("authority"));
+                    authorityEntity.setAuthority(authority);
+                    user.addAuthorities(authorityEntity);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return user;
     }
 }

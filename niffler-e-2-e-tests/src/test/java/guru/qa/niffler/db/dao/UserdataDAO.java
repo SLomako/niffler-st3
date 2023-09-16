@@ -1,17 +1,17 @@
 package guru.qa.niffler.db.dao;
 
-import guru.qa.niffler.db.model.userdata.UserDataUserEntity;
+import guru.qa.niffler.db.model.userdata.UserdataUserEntity;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface UserdataDAO {
 
-    UUID createUser(UserDataUserEntity user);
+    UUID createUser(UserdataUserEntity user);
 
     void deleteUserById(UUID userId);
 
-    List<UserDataUserEntity> getAllUsers();
+    List<UserdataUserEntity> getAllUsers();
 
     void renameUserNameById(UUID userId, String newUsername);
 }

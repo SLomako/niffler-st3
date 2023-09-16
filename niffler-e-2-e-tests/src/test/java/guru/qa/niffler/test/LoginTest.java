@@ -4,7 +4,7 @@ import com.github.javafaker.Faker;
 import guru.qa.niffler.db.dao.AuthDAO;
 import guru.qa.niffler.db.dao.UserdataDAO;
 import guru.qa.niffler.db.model.auth.AuthUserEntity;
-import guru.qa.niffler.db.model.userdata.UserDataUserEntity;
+import guru.qa.niffler.db.model.userdata.UserdataUserEntity;
 import guru.qa.niffler.jupiter.annotation.AuthUserId;
 import guru.qa.niffler.jupiter.annotation.DBCreateUser;
 import guru.qa.niffler.jupiter.annotation.UserdataUserId;
@@ -17,7 +17,7 @@ import java.util.UUID;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.sleep;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @WebTest
@@ -26,16 +26,15 @@ public class LoginTest {
     private LoginPage loginPage = new LoginPage();
 
     @Test
-    @DBCreateUser(username = "random", password = "12345")
+    @DBCreateUser(username = "random", password = "random")
     public void mainPageShouldBeVisibleAfterLogin(AuthUserEntity currentUserAuthDB) {
         loginPage.login(currentUserAuthDB.getUsername(), currentUserAuthDB.getPassword());
         $("h1.header__title").shouldHave(text("Niffler. The coin keeper."));
         $(".button-icon.button-icon_type_logout").click();
-
     }
 
     @Test
-    @DBCreateUser(username = "random", password = "12345")
+    @DBCreateUser(username = "random", password = "random")
     public void verifyUserExistsInAuthDB(AuthDAO authUserDAO, AuthUserEntity currentUserAuthDB) {
         List<AuthUserEntity> users = authUserDAO.getAllUsers();
         boolean isUserInDB = users.stream()
@@ -44,16 +43,16 @@ public class LoginTest {
     }
 
     @Test
-    @DBCreateUser(username = "random", password = "12345")
-    public void verifyUserExistsInUserDataDB(UserdataDAO userDataDAO, UserDataUserEntity currentUserUserdataDB) {
-        List<UserDataUserEntity> users = userDataDAO.getAllUsers();
+    @DBCreateUser(username = "random", password = "random")
+    public void verifyUserExistsInUserDataDB(UserdataDAO userDataDAO, UserdataUserEntity currentUserUserdataDB) {
+        List<UserdataUserEntity> users = userDataDAO.getAllUsers();
         boolean isUserInDB = users.stream()
                 .anyMatch(user -> currentUserUserdataDB.getUsername().equals(user.getUsername()));
         assertTrue(isUserInDB);
     }
 
     @Test
-    @DBCreateUser(username = "random", password = "12345")
+    @DBCreateUser(username = "random", password = "random")
     void shouldSuccessfullyLoginAfterUsernameIsChangedInDB(
             AuthUserEntity currentUserAuthDB,
             AuthDAO authUserDAO, UserdataDAO userDataDAO,
@@ -65,13 +64,18 @@ public class LoginTest {
 
         Faker faker = new Faker();
         String renamedUsername = faker.name().firstName();
-        sleep(3000);
         authUserDAO.renameUserNameById(createdAuthUserId, renamedUsername);
         userDataDAO.renameUserNameById(createdUserdataUserId, renamedUsername);
-        sleep(3000);
 
         loginPage.login(renamedUsername, currentUserAuthDB.getPassword());
         $("h1.header__title").shouldHave(text("Niffler. The coin keeper."));
+    }
+
+    @Test
+    @DBCreateUser(username = "random", password = "random")
+    void shouldMatchUsernameForCreatedAndFetchedUser(AuthDAO authDAO, AuthUserEntity currentUserAuthDB, @AuthUserId UUID createdAuthUserId) {
+        AuthUserEntity fetchedUser = authDAO.getUserById(createdAuthUserId);
+        assertEquals(currentUserAuthDB.getUsername(), fetchedUser.getUsername());
     }
 }
 

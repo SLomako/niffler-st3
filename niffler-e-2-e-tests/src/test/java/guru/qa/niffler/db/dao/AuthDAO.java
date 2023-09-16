@@ -14,4 +14,6 @@ public interface AuthDAO {
     List<AuthUserEntity> getAllUsers();
 
     void renameUserNameById(UUID userId, String newUsername);
+
+    AuthUserEntity getUserById(UUID userId);
 }

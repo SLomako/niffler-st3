@@ -6,7 +6,7 @@ import guru.qa.niffler.db.dao.UserdataDAO;
 import guru.qa.niffler.db.model.auth.AuthUserEntity;
 import guru.qa.niffler.db.model.auth.Authority;
 import guru.qa.niffler.db.model.auth.AuthorityEntity;
-import guru.qa.niffler.db.model.userdata.UserDataUserEntity;
+import guru.qa.niffler.db.model.userdata.UserdataUserEntity;
 import guru.qa.niffler.jupiter.annotation.AuthUserId;
 import guru.qa.niffler.jupiter.annotation.DBCreateUser;
 import guru.qa.niffler.jupiter.annotation.Dao;
@@ -27,7 +27,7 @@ public class DBCreateUserExtension implements BeforeEachCallback, AfterTestExecu
     private final DaoExtension daoExtension = new DaoExtension();
 
     @Dao
-    private AuthDAO authUserDAO;
+    private AuthDAO authDAO;
     @Dao
     private UserdataDAO userDataDAO;
 
@@ -43,7 +43,7 @@ public class DBCreateUserExtension implements BeforeEachCallback, AfterTestExecu
 
         if (annotation != null) {
             String username = annotation.username().equals("random") ? faker.name().firstName() : annotation.username();
-            String password = annotation.password();
+            String password = annotation.password().equals("random") ? faker.internet().password() : annotation.password();
 
             AuthUserEntity currentUserAuthDB = new AuthUserEntity();
             currentUserAuthDB.setUsername(username);
@@ -59,9 +59,9 @@ public class DBCreateUserExtension implements BeforeEachCallback, AfterTestExecu
                         return ae;
                     }).toList()
             );
-            UUID createdAuthUserId = authUserDAO.createUser(currentUserAuthDB);
+            UUID createdAuthUserId = authDAO.createUser(currentUserAuthDB);
 
-            UserDataUserEntity currentUserUserdataDB = new UserDataUserEntity();
+            UserdataUserEntity currentUserUserdataDB = new UserdataUserEntity();
             currentUserUserdataDB.setUsername(username);
             UUID createdUserdataUserId = userDataDAO.createUser(currentUserUserdataDB);
 
@@ -83,7 +83,7 @@ public class DBCreateUserExtension implements BeforeEachCallback, AfterTestExecu
         UUID createdUserdataUserId = (UUID) userDataMap.get("createdUserdataUserId");
 
         if (createdAuthUserId != null) {
-            authUserDAO.deleteUserById(createdAuthUserId);
+            authDAO.deleteUserById(createdAuthUserId);
         }
         if (createdUserdataUserId != null) {
             userDataDAO.deleteUserById(createdUserdataUserId);
@@ -93,7 +93,7 @@ public class DBCreateUserExtension implements BeforeEachCallback, AfterTestExecu
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
         Class<?> type = parameterContext.getParameter().getType();
-        return type.equals(UserDataUserEntity.class)
+        return type.equals(UserdataUserEntity.class)
                 || type.equals(AuthUserEntity.class)
                 || type.equals(AuthDAO.class)
                 || type.equals(UserdataDAO.class)
@@ -110,14 +110,14 @@ public class DBCreateUserExtension implements BeforeEachCallback, AfterTestExecu
         UUID createdAuthUserId = (UUID) userDataMap.get("createdAuthUserId");
         UUID createdUserdataUserId = (UUID) userDataMap.get("createdUserdataUserId");
         AuthUserEntity currentUserAuthDB = (AuthUserEntity) userDataMap.get("currentUserAuthDB");
-        UserDataUserEntity currentUserUserdataDB = (UserDataUserEntity) userDataMap.get("currentUserUserdataDB");
+        UserdataUserEntity currentUserUserdataDB = (UserdataUserEntity) userDataMap.get("currentUserUserdataDB");
 
-        if (type.equals(UserDataUserEntity.class)) {
+        if (type.equals(UserdataUserEntity.class)) {
             return currentUserUserdataDB;
         } else if (type.equals(AuthUserEntity.class)) {
             return currentUserAuthDB;
         } else if (type.equals(AuthDAO.class)) {
-            return authUserDAO;
+            return authDAO;
         } else if (type.equals(UserdataDAO.class)) {
             return userDataDAO;
         } else if (type.equals(UUID.class)) {

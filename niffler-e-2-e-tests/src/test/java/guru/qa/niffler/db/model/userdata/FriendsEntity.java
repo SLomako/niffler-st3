@@ -10,29 +10,29 @@ public class FriendsEntity {
     @Id
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private UserDataUserEntity user;
+    private UserdataUserEntity user;
 
     @Id
     @ManyToOne
     @JoinColumn(name = "friend_id", referencedColumnName = "id")
-    private UserDataUserEntity friend;
+    private UserdataUserEntity friend;
 
     @Column(name = "pending")
     private boolean pending;
 
-    public UserDataUserEntity getUser() {
+    public UserdataUserEntity getUser() {
         return user;
     }
 
-    public void setUser(UserDataUserEntity user) {
+    public void setUser(UserdataUserEntity user) {
         this.user = user;
     }
 
-    public UserDataUserEntity getFriend() {
+    public UserdataUserEntity getFriend() {
         return friend;
     }
 
-    public void setFriend(UserDataUserEntity friend) {
+    public void setFriend(UserdataUserEntity friend) {
         this.friend = friend;
     }
 

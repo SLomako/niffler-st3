@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "users")
-public class UserDataUserEntity {
+public class UserdataUserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false, columnDefinition = "UUID default gen_random_uuid()")
@@ -37,12 +37,12 @@ public class UserDataUserEntity {
     @OneToMany(mappedBy = "friend", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FriendsEntity> invites = new ArrayList<>();
 
-    public UserDataUserEntity(UUID id, String username) {
+    public UserdataUserEntity(UUID id, String username) {
         this.id = id;
         this.username = username;
     }
 
-    public UserDataUserEntity() {
+    public UserdataUserEntity() {
     }
 
     public UUID getId() {
