@@ -5,10 +5,7 @@ import guru.qa.niffler.db.dao.AuthDAO;
 import guru.qa.niffler.db.dao.UserdataDAO;
 import guru.qa.niffler.db.model.auth.AuthUserEntity;
 import guru.qa.niffler.db.model.userdata.UserdataUserEntity;
-import guru.qa.niffler.jupiter.annotation.AuthUserId;
-import guru.qa.niffler.jupiter.annotation.DBCreateUser;
-import guru.qa.niffler.jupiter.annotation.UserdataUserId;
-import guru.qa.niffler.jupiter.annotation.WebTest;
+import guru.qa.niffler.jupiter.annotation.*;
 import guru.qa.niffler.pages.LoginPage;
 import org.junit.jupiter.api.Test;
 
@@ -23,12 +20,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @WebTest
 public class LoginTest {
 
-    private LoginPage loginPage = new LoginPage();
+    private final LoginPage loginPage = new LoginPage();
 
     @Test
     @DBCreateUser(username = "random", password = "random")
-    public void mainPageShouldBeVisibleAfterLogin(AuthUserEntity currentUserAuthDB) {
-        loginPage.login(currentUserAuthDB.getUsername(), currentUserAuthDB.getPassword());
+    public void mainPageShouldBeVisibleAfterLogin(AuthUserEntity currentUserAuthDB, @OriginalPassword String password) {
+        loginPage.login(currentUserAuthDB.getUsername(), password);
         $("h1.header__title").shouldHave(text("Niffler. The coin keeper."));
         $(".button-icon.button-icon_type_logout").click();
     }
@@ -56,9 +53,10 @@ public class LoginTest {
     void shouldSuccessfullyLoginAfterUsernameIsChangedInDB(
             AuthUserEntity currentUserAuthDB,
             AuthDAO authUserDAO, UserdataDAO userDataDAO,
-            @AuthUserId UUID createdAuthUserId, @UserdataUserId UUID createdUserdataUserId) {
+            @AuthUserId UUID createdAuthUserId, @UserdataUserId UUID createdUserdataUserId,
+            @OriginalPassword String password) {
 
-        loginPage.login(currentUserAuthDB.getUsername(), currentUserAuthDB.getPassword());
+        loginPage.login(currentUserAuthDB.getUsername(), password);
         $("h1.header__title").shouldHave(text("Niffler. The coin keeper."));
         $(".button-icon.button-icon_type_logout").click();
 
@@ -67,7 +65,7 @@ public class LoginTest {
         authUserDAO.renameUserNameById(createdAuthUserId, renamedUsername);
         userDataDAO.renameUserNameById(createdUserdataUserId, renamedUsername);
 
-        loginPage.login(renamedUsername, currentUserAuthDB.getPassword());
+        loginPage.login(renamedUsername, password );
         $("h1.header__title").shouldHave(text("Niffler. The coin keeper."));
     }
 

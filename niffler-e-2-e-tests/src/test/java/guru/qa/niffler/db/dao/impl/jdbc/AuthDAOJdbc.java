@@ -5,7 +5,7 @@ import guru.qa.niffler.db.jdbc.DataSourceProvider;
 import guru.qa.niffler.db.model.auth.AuthUserEntity;
 import guru.qa.niffler.db.model.auth.Authority;
 import guru.qa.niffler.db.model.auth.AuthorityEntity;
-import guru.qa.niffler.db.springjdbc.ServiceDB;
+import guru.qa.niffler.db.ServiceDB;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

@@ -4,7 +4,7 @@ import guru.qa.niffler.db.dao.UserdataDAO;
 import guru.qa.niffler.db.jdbc.DataSourceProvider;
 import guru.qa.niffler.db.model.userdata.CurrencyValues;
 import guru.qa.niffler.db.model.userdata.UserdataUserEntity;
-import guru.qa.niffler.db.springjdbc.ServiceDB;
+import guru.qa.niffler.db.ServiceDB;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

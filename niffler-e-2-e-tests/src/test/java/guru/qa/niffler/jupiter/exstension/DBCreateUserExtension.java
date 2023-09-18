@@ -6,11 +6,9 @@ import guru.qa.niffler.db.dao.UserdataDAO;
 import guru.qa.niffler.db.model.auth.AuthUserEntity;
 import guru.qa.niffler.db.model.auth.Authority;
 import guru.qa.niffler.db.model.auth.AuthorityEntity;
+import guru.qa.niffler.db.model.userdata.CurrencyValues;
 import guru.qa.niffler.db.model.userdata.UserdataUserEntity;
-import guru.qa.niffler.jupiter.annotation.AuthUserId;
-import guru.qa.niffler.jupiter.annotation.DBCreateUser;
-import guru.qa.niffler.jupiter.annotation.Dao;
-import guru.qa.niffler.jupiter.annotation.UserdataUserId;
+import guru.qa.niffler.jupiter.annotation.*;
 import org.junit.jupiter.api.extension.*;
 
 import java.lang.reflect.Method;
@@ -56,6 +54,7 @@ public class DBCreateUserExtension implements BeforeEachCallback, AfterTestExecu
                     Arrays.stream(Authority.values()).map(a -> {
                         AuthorityEntity ae = new AuthorityEntity();
                         ae.setAuthority(a);
+                        ae.setUser(currentUserAuthDB);
                         return ae;
                     }).toList()
             );
@@ -63,6 +62,8 @@ public class DBCreateUserExtension implements BeforeEachCallback, AfterTestExecu
 
             UserdataUserEntity currentUserUserdataDB = new UserdataUserEntity();
             currentUserUserdataDB.setUsername(username);
+            currentUserUserdataDB.setCurrency(CurrencyValues.RUB);
+
             UUID createdUserdataUserId = userDataDAO.createUser(currentUserUserdataDB);
 
             Map<String, Object> userDataMap = new HashMap<>();
@@ -70,6 +71,7 @@ public class DBCreateUserExtension implements BeforeEachCallback, AfterTestExecu
             userDataMap.put("createdUserdataUserId", createdUserdataUserId);
             userDataMap.put("currentUserAuthDB", currentUserAuthDB);
             userDataMap.put("currentUserUserdataDB", currentUserUserdataDB);
+            userDataMap.put("originalPassword", password);
 
             context.getStore(NAMESPACE).put(context.getUniqueId(), userDataMap);
         }
@@ -93,6 +95,10 @@ public class DBCreateUserExtension implements BeforeEachCallback, AfterTestExecu
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
         Class<?> type = parameterContext.getParameter().getType();
+        Parameter parameter = parameterContext.getParameter();
+        if (type.equals(String.class) && parameter.isAnnotationPresent(OriginalPassword.class)) {
+            return true;
+        }
         return type.equals(UserdataUserEntity.class)
                 || type.equals(AuthUserEntity.class)
                 || type.equals(AuthDAO.class)
@@ -111,6 +117,8 @@ public class DBCreateUserExtension implements BeforeEachCallback, AfterTestExecu
         UUID createdUserdataUserId = (UUID) userDataMap.get("createdUserdataUserId");
         AuthUserEntity currentUserAuthDB = (AuthUserEntity) userDataMap.get("currentUserAuthDB");
         UserdataUserEntity currentUserUserdataDB = (UserdataUserEntity) userDataMap.get("currentUserUserdataDB");
+        String originalPassword = (String) userDataMap.get("originalPassword");
+
 
         if (type.equals(UserdataUserEntity.class)) {
             return currentUserUserdataDB;
@@ -125,6 +133,10 @@ public class DBCreateUserExtension implements BeforeEachCallback, AfterTestExecu
                 return createdAuthUserId;
             } else if (parameter.isAnnotationPresent(UserdataUserId.class)) {
                 return createdUserdataUserId;
+            }
+        } else if (type.equals(String.class)) {
+            if (parameter.isAnnotationPresent(OriginalPassword.class)) {
+                return originalPassword;
             }
         }
         throw new ParameterResolutionException("Unsupported parameter: " + type);
