@@ -12,8 +12,6 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.UUID;
 
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -26,8 +24,8 @@ public class LoginTest {
     @DBCreateUser(username = "random", password = "random")
     public void mainPageShouldBeVisibleAfterLogin(AuthUserEntity currentUserAuthDB, @OriginalPassword String password) {
         loginPage.login(currentUserAuthDB.getUsername(), password);
-        $("h1.header__title").shouldHave(text("Niffler. The coin keeper."));
-        $(".button-icon.button-icon_type_logout").click();
+        loginPage.verifyMainPageIsVisible();
+        loginPage.logout();
     }
 
     @Test
@@ -57,16 +55,17 @@ public class LoginTest {
             @OriginalPassword String password) {
 
         loginPage.login(currentUserAuthDB.getUsername(), password);
-        $("h1.header__title").shouldHave(text("Niffler. The coin keeper."));
-        $(".button-icon.button-icon_type_logout").click();
+        loginPage.verifyMainPageIsVisible();
+        loginPage.logout();
 
         Faker faker = new Faker();
         String renamedUsername = faker.name().firstName();
         authUserDAO.renameUserNameById(createdAuthUserId, renamedUsername);
         userDataDAO.renameUserNameById(createdUserdataUserId, renamedUsername);
 
-        loginPage.login(renamedUsername, password );
-        $("h1.header__title").shouldHave(text("Niffler. The coin keeper."));
+        loginPage.login(renamedUsername, password);
+        loginPage.verifyMainPageIsVisible();
+        loginPage.logout();
     }
 
     @Test
