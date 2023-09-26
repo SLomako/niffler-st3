@@ -2,8 +2,7 @@ package guru.qa.niffler.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import guru.qa.niffler.jupiter.UserQueue;
-import guru.qa.niffler.jupiter.User;
+import guru.qa.niffler.jupiter.annotation.UserQueue;
 
 import java.util.UUID;
 
@@ -43,8 +42,6 @@ public class UserJson {
     public void setUserType(UserQueue.UserType userType) {
         this.userType = userType;
     }
-  
-    transient User.UserType userType;
 
     public UserJson() {
     }
@@ -111,13 +108,5 @@ public class UserJson {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public User.UserType getUserType() {
-        return userType;
-    }
-
-    public void setUserType(User.UserType userType) {
-        this.userType = userType;
     }
 }

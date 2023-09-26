@@ -1,5 +1,6 @@
-package guru.qa.niffler.jupiter;
+package guru.qa.niffler.jupiter.exstension;
 
+import guru.qa.niffler.jupiter.annotation.UserQueue;
 import guru.qa.niffler.model.UserJson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.*;
@@ -87,8 +88,7 @@ public class UserQueueExtension implements BeforeEachCallback, AfterTestExecutio
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws
             ParameterResolutionException {
-        Parameter parameter = parameterContext.getParameter();
-        return parameter == null || parameterContext.getParameter().getType().isAssignableFrom(UserJson.class);
+        return parameterContext.getParameter().getType().isAssignableFrom(UserJson.class);
     }
 
     @Override

@@ -1,5 +1,6 @@
-package guru.qa.niffler.jupiter;
+package guru.qa.niffler.jupiter.annotation;
 
+import guru.qa.niffler.jupiter.exstension.CategoryExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.lang.annotation.ElementType;
@@ -7,14 +8,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.PARAMETER)
-@ExtendWith(UserQueueExtension.class)
-public @interface UserQueue {
+@ExtendWith(CategoryExtension.class)
+public @interface Category {
 
-    UserType userType();
+    String category();
 
-    enum UserType {
-        INVITE_SENT, INVITE_RECEIVED, FRIEND
-    }
+    String username();
 }
