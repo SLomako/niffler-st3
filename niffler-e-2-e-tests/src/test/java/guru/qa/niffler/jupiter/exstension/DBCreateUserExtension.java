@@ -31,7 +31,6 @@ public class DBCreateUserExtension implements BeforeEachCallback, AfterTestExecu
 
     private Faker faker = new Faker();
 
-
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
         daoExtension.postProcessTestInstance(this, context);

@@ -1,6 +1,6 @@
 package guru.qa.niffler.pages;
 
-import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import guru.qa.niffler.model.UserJson;
 
@@ -13,7 +13,9 @@ public class LoginPage {
             loginButton = $("a[href*='redirect']"),
             usernameInput = $("input[name='username']"),
             passwordInput = $("input[name='password']"),
-            signInButton = $("button[type='submit']");
+            signInButton = $("button[type='submit']"),
+            headerTitle = $("h1.header__title"),
+            logoutButton = $(".button-icon.button-icon_type_logout");
 
     public void login(UserJson userForTest) {
         internalLogin(userForTest.getUsername(), userForTest.getPassword());
@@ -21,6 +23,14 @@ public class LoginPage {
 
     public void login(String username, String password) {
         internalLogin(username, password);
+    }
+
+    public void verifyMainPageIsVisible() {
+        headerTitle.shouldHave(Condition.text("Niffler. The coin keeper."));
+    }
+
+    public void logout() {
+        logoutButton.click();
     }
 
     private void internalLogin(String username, String password) {
