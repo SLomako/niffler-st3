@@ -1,5 +1,6 @@
 package guru.qa.niffler.test;
 
+import com.codeborne.selenide.Configuration;
 import guru.qa.niffler.jupiter.annotation.UserQueue;
 import guru.qa.niffler.jupiter.annotation.WebTest;
 import guru.qa.niffler.model.UserJson;
@@ -22,17 +23,19 @@ public class UserWebTest {
             FRIEND_STATUS_NOT_DISPLAYED = "The status '" + YOU_ARE_FRIENDS_STATUS + "' not displayed for the user in the table",
             PENDING_INVITATION_NOT_DISPLAYED = "The status '" + PENDING_INVITATION_STATUS + "' not displayed for the user in the table";
 
-    private LoginPage loginPage = new LoginPage();
-    private FriendsPage friendsPage = new FriendsPage();
-    private AllPeoplePage peoplePage = new AllPeoplePage();
+    private final LoginPage loginPage = new LoginPage();
+    private final FriendsPage friendsPage = new FriendsPage();
+    private final AllPeoplePage peoplePage = new AllPeoplePage();
 
     @BeforeEach
-    void doLogin(@UserQueue(userType = UserQueue.UserType.FRIEND) UserJson userForTest) {
+    void doLogin(UserJson userForTest) {
+        Configuration.browserSize = "1470x956";
         loginPage.login(userForTest);
+
     }
 
     @RepeatedTest(NUMBER_OF_REPEATS)
-    void shouldDisplayFriendStatusInFriendList(UserJson userForTest) {
+    void shouldDisplayFriendStatusInFriendList(@UserQueue(userType = UserQueue.UserType.FRIEND) UserJson userForTest) {
         assertTrue(friendsPage.isFriendDisplayed(userForTest, YOU_ARE_FRIENDS_STATUS),
                 FRIEND_STATUS_NOT_DISPLAYED);
     }

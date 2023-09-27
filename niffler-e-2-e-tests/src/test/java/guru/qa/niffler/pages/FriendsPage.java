@@ -1,16 +1,17 @@
 package guru.qa.niffler.pages;
 
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.WebDriverRunner;
 import guru.qa.niffler.model.UserJson;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 
 public class FriendsPage {
 
@@ -29,8 +30,8 @@ public class FriendsPage {
     public boolean isSubmitInvitationButtonDisplayed(UserJson userForTest) {
         navigateToFriendsPage();
 
-        SelenideElement userRow = $$("table tbody tr").find(text(userForTest.getUsernamePeek()));
-        SelenideElement submitButton = userRow.$("[data-tooltip-content='Submit invitation']");
+        SelenideElement userRow = $$("table tbody tr").find(text(userForTest.getUsernamePeek())).shouldBe(visible, Duration.ofSeconds(10));
+        SelenideElement submitButton = userRow.$("[data-tooltip-content='Submit invitation']").shouldBe(visible, Duration.ofSeconds(10));
 
         return userRow.exists() && submitButton.exists();
     }
