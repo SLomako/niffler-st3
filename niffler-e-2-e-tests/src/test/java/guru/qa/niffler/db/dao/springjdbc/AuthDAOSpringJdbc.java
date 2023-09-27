@@ -1,12 +1,12 @@
-package guru.qa.niffler.db.dao.impl.jdbc;
+package guru.qa.niffler.db.dao.springjdbc;
 
 import guru.qa.niffler.db.dao.AuthDAO;
 import guru.qa.niffler.db.jdbc.DataSourceProvider;
-import guru.qa.niffler.db.mapper.AuthUserEntityRowMapper;
+import guru.qa.niffler.db.springjdbc.AuthUserEntityRowMapper;
 import guru.qa.niffler.db.model.auth.AuthUserEntity;
 import guru.qa.niffler.db.model.auth.Authority;
 import guru.qa.niffler.db.model.auth.AuthorityEntity;
-import guru.qa.niffler.db.springjdbc.ServiceDB;
+import guru.qa.niffler.db.ServiceDB;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.JdbcTransactionManager;

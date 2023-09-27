@@ -1,4 +1,4 @@
-package guru.qa.niffler.db.springjdbc;
+package guru.qa.niffler.db;
 
 import guru.qa.niffler.config.Config;
 
