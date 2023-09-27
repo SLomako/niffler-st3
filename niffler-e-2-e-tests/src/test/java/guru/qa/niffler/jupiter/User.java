@@ -1,6 +1,5 @@
-package guru.qa.niffler.jupiter.annotation;
+package guru.qa.niffler.jupiter;
 
-import guru.qa.niffler.jupiter.exstension.BrowserExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.lang.annotation.ElementType;
@@ -8,8 +7,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-@ExtendWith(BrowserExtension.class)
-public @interface WebTest {
+@ExtendWith(UserQueueExtension.class)
+public @interface User {
+
+    UserType userType();
+
+    enum UserType {
+        WITH_FRIENDS, INVITATION_SENT, INVITATION_RECEIVED
+    }
 }
