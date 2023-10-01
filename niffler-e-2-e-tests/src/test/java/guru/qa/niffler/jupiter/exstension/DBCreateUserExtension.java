@@ -20,7 +20,7 @@ import java.util.UUID;
 
 public class DBCreateUserExtension implements BeforeEachCallback, AfterTestExecutionCallback, ParameterResolver {
 
-    public ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(DBCreateUserExtension.class);
+    public static ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(DBCreateUserExtension.class);
 
     private final DaoExtension daoExtension = new DaoExtension();
 
@@ -71,13 +71,14 @@ public class DBCreateUserExtension implements BeforeEachCallback, AfterTestExecu
             userDataMap.put("currentUserAuthDB", currentUserAuthDB);
             userDataMap.put("currentUserUserdataDB", currentUserUserdataDB);
             userDataMap.put("originalPassword", password);
+            userDataMap.put("originalUsername", username);
 
             context.getStore(NAMESPACE).put(context.getUniqueId(), userDataMap);
         }
     }
 
     @Override
-    public void afterTestExecution(ExtensionContext context) throws Exception {
+    public void afterTestExecution(ExtensionContext context) {
         Map userDataMap = context.getStore(NAMESPACE).get(context.getUniqueId(), Map.class);
 
         UUID createdAuthUserId = (UUID) userDataMap.get("createdAuthUserId");

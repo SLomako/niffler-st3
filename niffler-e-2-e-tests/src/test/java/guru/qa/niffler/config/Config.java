@@ -11,6 +11,8 @@ public interface Config {
 
     String databaseHost();
 
+    String nifflerFrontURL();
+
     default String databaseUser() {
         return "postgres";
     }
@@ -22,4 +24,7 @@ public interface Config {
     default int databasePort() {
         return 5432;
     }
+
+    String nifflerAuthURL();
+
 }
