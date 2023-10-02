@@ -18,7 +18,7 @@ public class BrowserExtension implements BeforeAllCallback, AfterEachCallback, T
     @Override
     public void beforeAll(ExtensionContext extensionContext) {
         Configuration.browserSize = "1470x956";
-        Configuration.headless = true;
+        //Configuration.headless = true;
     }
 
     @Override

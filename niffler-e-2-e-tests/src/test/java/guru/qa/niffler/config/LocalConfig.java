@@ -11,4 +11,14 @@ public class LocalConfig implements Config {
     public String databaseHost() {
         return "localhost";
     }
+
+    @Override
+    public String nifflerFrontURL() {
+        return "http://127.0.0.1:3000";
+    }
+
+    @Override
+    public String nifflerAuthURL() {
+        return "http://127.0.0.1:9000";
+    }
 }
